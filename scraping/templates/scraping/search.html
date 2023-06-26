@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Вакансии{% endblock title %}
+{% block content %}
+{% for vac in vacancy %}
+<div class="card my-3">
+    <div class="card">
+        <div class="card-header"><h5>
+            <a href="{{ vac.url }}">{{ vac.title }}</a></h5>
+        </div>
+        <div class="card-body">
+            <h4>{{ vac.company }} </h4>
+            <p class="card-text">{{ vac.description }} </p>
+            <p><small>{{ vac.city.name }} | {{ vac.language }} | {{ vac.timestamp|date:"d-m-Y" }}</small></p>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-md-7 mx-auto">
+    <h3>К сожалению, по Вашему запросу, ничего не найдено.</h3>
+</div>
+{% endfor %}
+{% endblock content %}

@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}Главная{% endblock title %}
 {% block content %}
-{% for vac in vacancy %}
-<div class="card my-3">
-    <div class="card">
-        <div class="card-header"><h5>
-            <a href="{{ vac.url }}">{{ vac.title }}</a></h5>
-        </div>
-        <div class="card-body">
-            <p class="card-text">{{ vac.description }} </p>
-            <p><small>{{ vac.city.name }} | {{ vac.language }} | {{ vac.timestamp|date:"d-m-Y" }}</small></p>
-        </div>
+
+<form>
+
+</form>
+
+<div class="row ">
+    <div class="col-md-5 mx-auto">
+        <form method="GET" action="/search/">
+            <div class="mb-3">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </form>
     </div>
 </div>
 
-{% endfor %}
 {% endblock content %}
