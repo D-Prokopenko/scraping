@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import City, Language, Vacancy
+from .models import City, Language, Vacancy, Error, Url
 
 # Register your models here.
 
@@ -19,3 +19,14 @@ class LanguageAdmin(admin.ModelAdmin):
 class VacancyAdmin(admin.ModelAdmin):
     """ Отображение вакансий """
     list_display = ('title', 'company', )
+
+
+@admin.register(Error)
+class ErrorAdmin(admin.ModelAdmin):
+    """ Отображение ошибок """
+    list_display = ('timestamp', )
+
+@admin.register(Url)
+class ErrorAdmin(admin.ModelAdmin):
+    """ Отображение ошибок """
+    list_display = ("city", "language")

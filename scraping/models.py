@@ -1,10 +1,13 @@
 from django.db import models
-
+import jsonfield
 from .utils import from_cyrillic_to_lat
 
 
 # Create your models here.
 
+def default_urls():
+    return {'rabota': '',
+            'superjob': ''}
 
 class City(models.Model):
     """ Модель городов """
@@ -64,3 +67,25 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name = "Вакансия"
         verbose_name_plural = "Вакансии"
+        ordering = ['-timestamp']
+
+
+class Error(models.Model):
+    timestamp = models.DateField(auto_now_add=True, blank=True)
+    data = jsonfield.JSONField()
+
+    def __str__(self):
+        return self.timestamp
+    
+    class Meta:
+        verbose_name = 'Ошибку'
+        verbose_name_plural = 'Ошибки'
+
+
+class Url(models.Model):
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name="Город")
+    language = models.ForeignKey('Language', on_delete=models.CASCADE, verbose_name="Язык программирования")
+    url_data = jsonfield.JSONField(default=default_urls)
+
+    class Meta:
+        unique_together = ("city", "language")
