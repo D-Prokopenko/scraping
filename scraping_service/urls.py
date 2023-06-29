@@ -21,4 +21,6 @@ from scraping.views import HomeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('scraping.urls')),
+    path('accounts/', include(('accounts.urls', 'accounts'))),
+
 ]
