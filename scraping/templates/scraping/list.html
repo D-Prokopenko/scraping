@@ -4,9 +4,7 @@
 {% for vac in vacancy %}
 <div class="card my-3">
     <div class="card">
-        <div class="card-header"><h5>
-            <a href="{{ vac.url }}">{{ vac.title }}</a></h5>
-        </div>
+            <h5 class="card-header"><a href="{{ vac.url }}">{{ vac.title }}</a></h5>
         <div class="card-body">
             <h4>{{ vac.company }} </h4>
             <p class="card-text">{{ vac.description }} </p>

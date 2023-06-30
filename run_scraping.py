@@ -24,6 +24,7 @@ parsers = ((rabota, 'rabota'),
 
 jobs, errors = [], []
 
+
 def get_settings():
     qs = User.objects.filter(send_email=True).values()
     settings_ls = set((q['city_id'], q['language_id']) for q in qs)

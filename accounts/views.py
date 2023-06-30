@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render, redirect
-
+from django.contrib import messages
 # Create your views here.
 from django.views import View
 from .forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
@@ -46,6 +46,7 @@ class RegisterView(View):
             new_user = form.save(commit=False)
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
+            messages.success(request, 'Пользователь зарегистрирован.')
             return render(request, 'accounts/register_done.html', {'new_user': new_user, })
         return render(request, 'accounts/register.html', {
             'form': form,
@@ -77,6 +78,7 @@ class PersonAreaView(View):
             user.language = data['language']
             user.send_email = data['send_email']
             user.save()
+            messages.success(request, 'Данные сохранены.')
             return redirect('accounts:update')
         form = UserUpdateForm(initial={'city': user.city, 'language': user.language, 'send_email': user.send_email})
         return render(request, 'accounts/update.html', {'form': form, })
@@ -88,4 +90,5 @@ class DelPersonView(View):
         user = request.user
         qs = User.objects.get(pk=user.pk)
         qs.delete()
+        messages.error(request, 'Пользователь удален.')
         return redirect('home')
