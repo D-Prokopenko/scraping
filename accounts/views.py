@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 # Create your views here.
 from django.views import View
-from .forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
+import datetime as dt
+from scraping.models import Error
+from .forms import UserLoginForm, UserRegistrationForm, UserUpdateForm, ContactForm
 
 User = get_user_model()
 
@@ -63,9 +65,12 @@ class PersonAreaView(View):
     """ Личный кабинет """
     def get(self, request):
         if request.user.is_authenticated:
+            contact_form = ContactForm()
             user = request.user
             form = UserUpdateForm(initial={'city': user.city, 'language': user.language, 'send_email': user.send_email})
-            return render(request, 'accounts/update.html', {'form': form, })
+            return render(request, 'accounts/update.html', {
+                'form': form,
+                'contact_form': contact_form})
         else:
             return redirect('accounts:login')
 
@@ -92,3 +97,32 @@ class DelPersonView(View):
         qs.delete()
         messages.error(request, 'Пользователь удален.')
         return redirect('home')
+
+
+class MsgAdminView(View):
+    """ Запрос на добавление города/языка """
+    def post(self, request):
+        contact_form = ContactForm(request.POST or None)
+        if contact_form.is_valid():
+            data = contact_form.cleaned_data
+            city = data.get('city')
+            language = data.get('language')
+            email = data.get('email')
+            qs = Error.objects.filter(timestamp=dt.date.today())
+            if qs.exists():
+                err = qs.first()
+                data = err.data.get('user_data', [])
+                data.append({'city': city, 'email': email, 'language': language})
+                err.data['user_data'] = data
+                err.save()
+            else:
+                data = [{'city': city, 'email': email, 'language': language}]
+                Error(data=f"user_data: {data}").save()
+            messages.success(request, 'Данные отправлены администрации.')
+            return redirect('accounts:update')
+        else:
+            return redirect('accounts:update')
+
+    def get(self, request):
+        contact_form = ContactForm()
+        return redirect('accounts:login')

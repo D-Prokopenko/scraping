@@ -1,49 +1,51 @@
 {% extends 'base.html' %}
 {% block title %}Вакансии{% endblock title %}
 {% block content %}
-{% for vac in vacancy %}
-<div class="card my-3">
-    <div class="card">
-            <h5 class="card-header"><a href="{{ vac.url }}">{{ vac.title }}</a></h5>
-        <div class="card-body">
-            <h4>{{ vac.company }} </h4>
-            <p class="card-text">{{ vac.description }} </p>
-            <p><small>{{ vac.city.name }} | {{ vac.language }} | {{ vac.timestamp|date:"d-m-Y" }}</small></p>
+{% if vacancy %}
+    <h3 class="my-4 text-center">Результаты согласно Вашего запроса.</h3>
+    {% for vac in vacancy %}
+        <div class="card my-3">
+            <div class="card">
+                    <h5 class="card-header"><a href="{{ vac.url }}">{{ vac.title }}</a></h5>
+                <div class="card-body">
+                    <p class="card-text">{{ vac.description }} </p>
+                    <p>{{ vac.company }} </p>
+                    <p><small>{{ vac.city.name }} | {{ vac.language }} | {{ vac.timestamp|date:"d-m-Y" }}</small></p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if vacancy.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?city={{ city }}&language={{ language }}&page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for page in vacancy.paginator.page_range %}
+                    <li class="page-item
+                    {% if page == vacancy.number %} active {% endif %}  "><a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ page }} ">{{ page }} </a></li>
+                    {% endfor %}
+                    <li class="page-item">
+                        {% if vacancy.has_next %}
+                        <a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ vacancy.next_page_number }}" aria-label="Next">
+
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
-</div>
-{% empty %}
+
+{% else %}
 <div class="col-md-7 mx-auto">
     <h3>К сожалению, по Вашему запросу, ничего не найдено.</h3>
-</div>
-{% endfor %}
-{% if vacancy %}
-<div class="row">
-    <div class="col">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                {% if vacancy.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?city={{ city }}&language={{ language }}&page=1" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {% endif %}
-                {% for page in vacancy.paginator.page_range %}
-                <li class="page-item
-                {% if page == vacancy.number %} active {% endif %}  "><a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ page }} ">{{ page }} </a></li>
-                {% endfor %}
-                <li class="page-item">
-                    {% if vacancy.has_next %}
-                    <a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ vacancy.next_page_number }}" aria-label="Next">
-                        
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    {% endif %}
-                </li>
-            </ul>
-        </nav>
-    </div>
 </div>
 {% endif %}
 {% endblock content %}

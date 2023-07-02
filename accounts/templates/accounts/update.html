@@ -18,5 +18,30 @@
         </form>
     </div>
 </div>
+<div class="row ">
+    <div class="col-md-8 mx-auto">
+                        <p class="my-4">Если Dы не нашли подходящий набор Город, Специальность,
+                    Вы можете заполнить форму ниже с Вашими пожеланиями.
+                    После того, как необходиые данные будут добавлены,
+                    Вы получите письмо на указанный Вами e-mail.</p>
+        <p>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Показать форму
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <form method="POST" action="{% url 'accounts:contact' %} ">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ contact_form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock content %}

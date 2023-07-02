@@ -1,0 +1,9 @@
+@font-face {
+    font-family: Unkempt;
+    src: url(../fonts/Unkempt-Regular.ttf);
+}
+
+#brand {
+    font-family: Unkempt;
+    color: #FFF;
+}
